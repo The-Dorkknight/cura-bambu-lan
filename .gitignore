@@ -1,0 +1,28 @@
+# Build output
+dist/
+build/
+*.curapackage
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+
+# Logs
+*.log
+logs/
+
+# Signing keys and secrets, never commit
+*.jks
+*.keystore
+*.key
+access_code*.txt
+
+# Editors / OS
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db

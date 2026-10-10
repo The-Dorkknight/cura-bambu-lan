@@ -1,0 +1,59 @@
+# Required Notice: Copyright Matthew Armstrong (https://github.com/The-Dorkknight)
+# Licensed under the PolyForm Noncommercial License 1.0.0. No warranty.
+
+name: Bug report
+description: Something isn't working
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting. **Never post your printer's access code.** For security problems use the Security tab instead (see SECURITY.md).
+  - type: input
+    id: version
+    attributes:
+      label: Plugin version
+      description: Extensions → Bambu LAN → About
+      placeholder: "1.1.0"
+    validations:
+      required: true
+  - type: input
+    id: cura
+    attributes:
+      label: Cura version
+      placeholder: "5.13.0"
+    validations:
+      required: true
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Operating system
+      options:
+        - Linux (AppImage)
+        - Linux (Flatpak)
+        - macOS
+        - Windows
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: test
+    attributes:
+      label: Test connection report
+      description: Paste the text from the setup dialog after clicking Test connection. You can blank out the serial number.
+      render: text
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened, and what did you expect?
+      description: Include the exact error message.
+    validations:
+      required: true
+  - type: textarea
+    id: log
+    attributes:
+      label: cura.log excerpt
+      description: Help → Show Configuration Folder → cura.log. Lines containing "Bambu LAN" are enough.
+      render: text

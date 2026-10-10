@@ -1,0 +1,8 @@
+# Required Notice: Copyright Matthew Armstrong (https://github.com/The-Dorkknight)
+# Licensed under the PolyForm Noncommercial License 1.0.0. No warranty.
+
+blank_issues_enabled: false
+contact_links:
+  - name: Security problem
+    url: https://github.com/The-Dorkknight/cura-bambu-lan/security/advisories/new
+    about: Report security issues privately, not as a public issue.

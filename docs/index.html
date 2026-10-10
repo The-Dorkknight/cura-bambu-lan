@@ -1,0 +1,157 @@
+<!doctype html>
+<!-- Required Notice: Copyright Matthew Armstrong (https://github.com/The-Dorkknight)
+     Licensed under the PolyForm Noncommercial License 1.0.0. No warranty. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bambu LAN Print for Cura</title>
+<meta name="description" content="Cura plugin that sends prints straight to a Bambu Lab printer over your local network. No cloud. Source-available · Non-commercial.">
+<link rel="icon" href="images/favicon-64.png">
+<link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+<style>
+:root{
+  --bg:#f6f4f0; --panel:#ffffff; --ink:#1d2127; --muted:#5d6570; --line:#e2ddd4;
+  --accent:#15803d; --accent-ink:#ffffff; --ok:#15803d; --code:#efebe4; --shadow:0 1px 2px rgba(0,0,0,.06),0 8px 24px rgba(0,0,0,.06);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#12161b; --panel:#1b2128; --ink:#e8eaed; --muted:#9aa3ad; --line:#2a323b;
+    --accent:#22c55e; --accent-ink:#06210f; --ok:#22c55e; --code:#232a33; --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.3);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#12161b; --panel:#1b2128; --ink:#e8eaed; --muted:#9aa3ad; --line:#2a323b;
+  --accent:#22c55e; --accent-ink:#06210f; --ok:#22c55e; --code:#232a33; --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.3);
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,Ubuntu,sans-serif}
+.wrap{max-width:1040px;margin:0 auto;padding:0 16px}
+a{color:var(--accent)}
+code,pre{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.9em}
+code{background:var(--code);padding:.1em .35em;border-radius:4px}
+pre{background:var(--code);padding:12px 14px;border-radius:8px;overflow-x:auto;margin:.6em 0}
+pre code{background:none;padding:0}
+header.top{display:flex;align-items:center;justify-content:space-between;padding:14px 0;gap:12px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:650;color:var(--ink);text-decoration:none}
+.brand img{width:32px;height:32px}
+.badge{display:inline-block;font-size:.78rem;font-weight:600;border:1px solid var(--line);border-radius:999px;padding:2px 10px;color:var(--muted);background:var(--panel)}
+.hero{display:grid;grid-template-columns:1.05fr 1fr;gap:36px;align-items:center;padding:36px 0 28px}
+.hero h1{font-size:clamp(2rem,4.5vw,3rem);line-height:1.1;margin:.3em 0 .35em;letter-spacing:-.02em}
+.hero p.lead{font-size:1.12rem;color:var(--muted);margin:0 0 1.2em}
+.hero .icon{width:84px;height:84px;border-radius:20px;box-shadow:var(--shadow)}
+.btns{display:flex;flex-wrap:wrap;gap:10px}
+.btn{display:inline-block;padding:10px 18px;border-radius:10px;font-weight:600;text-decoration:none;border:1px solid var(--line);color:var(--ink);background:var(--panel)}
+.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:transparent}
+.shot{width:100%;height:auto;border-radius:12px;border:1px solid var(--line);box-shadow:var(--shadow);display:block}
+h2{font-size:1.5rem;margin:2.2em 0 .6em;letter-spacing:-.01em}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px}
+.card h3{margin:0 0 .35em;font-size:1.05rem}
+.card p{margin:0;color:var(--muted)}
+ol.steps{padding-left:1.3em}
+ol.steps li{margin:.45em 0}
+.gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.gallery figure{margin:0}
+.gallery figcaption{color:var(--muted);font-size:.9rem;margin-top:6px}
+.gallery img{width:100%;height:auto;border-radius:10px;border:1px solid var(--line);display:block}
+.note{background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:8px;padding:12px 16px;color:var(--muted)}
+footer{margin:48px 0 0;padding:24px 0 40px;border-top:1px solid var(--line);color:var(--muted);font-size:.9rem}
+footer p{margin:.3em 0}
+@media (max-width:760px){
+  .hero{grid-template-columns:1fr;gap:22px;padding-top:16px}
+  .cards{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <a class="brand" href="#"><img src="images/favicon-64.png" alt="">Bambu LAN Print</a>
+    <span class="badge">Source-available · Non-commercial</span>
+  </header>
+
+  <section class="hero">
+    <div>
+      <img class="icon" src="images/icon-512.png" alt="Bambu LAN Print icon">
+      <h1>Slice in Cura. Print on your Bambu. No cloud.</h1>
+      <p class="lead">A Cura plugin that adds a <strong>Print over LAN</strong> button: the job uploads to the printer's SD card and starts, over your own network only. Works on older firmware as-is, and on newer firmware with Developer Mode.</p>
+      <p class="note" style="margin:0 0 1.2em"><strong>Pre-release:</strong> tested inside Cura 5.13.0 against a simulated Bambu printer, not yet on real hardware. Watch your first print.</p>
+      <div class="btns">
+        <a class="btn primary" data-repo-link="/releases/latest" href="https://github.com/The-Dorkknight/cura-bambu-lan/releases/latest">Download</a>
+        <a class="btn" data-repo-link="" href="https://github.com/The-Dorkknight/cura-bambu-lan">Source on GitHub</a>
+      </div>
+    </div>
+    <img class="shot" src="images/setup-dialog.webp" alt="Setup dialog after a successful connection test" style="max-width:420px;margin:0 auto">
+  </section>
+
+  <h2>What it does</h2>
+  <div class="cards">
+    <div class="card"><h3>No cloud</h3><p>Talks only to the printer on your network, over TLS, using the community-documented LAN protocol. No Bambu account, Bambu Connect or Bambu Studio.</p></div>
+    <div class="card"><h3>Knows your firmware</h3><p><strong>Test connection</strong> reads the model and firmware, says whether Developer Mode is needed, and picks the right file path for A1, P1, X1 and newer models.</p></div>
+    <div class="card"><h3>Nothing to install</h3><p>Plain Python from Cura itself. Checks the printer is idle and has an SD card before uploading, and verifies it's a genuine Bambu printer before sending your access code.</p></div>
+  </div>
+
+  <h2>Install</h2>
+  <ol class="steps">
+    <li>Download <code>BambuLAN-&lt;version&gt;.curapackage</code> from the <a data-repo-link="/releases" href="https://github.com/The-Dorkknight/cura-bambu-lan/releases">Releases page</a>, drag it onto UltiMaker Cura 5.x and restart.</li>
+    <li>Select your Bambu printer in Cura, then <strong>Extensions → Bambu LAN → Set up this printer…</strong></li>
+    <li>Find the printer or type its IP, enter the access code from its screen, click <strong>Test connection</strong>.</li>
+    <li>Accept the notice, pick filament source and plate, <strong>Save</strong>. Slice and click <strong>Print over LAN</strong>.</li>
+  </ol>
+  <p>Newer firmware (A1 01.05+, P1 01.08.02+, X1 01.08.03+, H2D, P2 series) needs <strong>LAN-only mode</strong> and <strong>Developer Mode</strong> on the printer. Older firmware needs neither. Your Cura profile needs Bambu's start G-code: see the <a data-repo-link="#your-cura-printer-profile" href="https://github.com/The-Dorkknight/cura-bambu-lan#your-cura-printer-profile">README</a>.</p>
+
+  <h2>Screens</h2>
+  <div class="gallery">
+    <figure><img src="images/menu.webp" alt="Bambu LAN menu in Cura" loading="lazy"><figcaption>Extensions → Bambu LAN.</figcaption></figure>
+    <figure><img src="images/notice.webp" alt="First-use notice in the setup dialog" loading="lazy"><figcaption>Save stays disabled until the notice is accepted.</figcaption></figure>
+    <figure><img src="images/print-over-lan.webp" alt="Print over LAN button in Cura" loading="lazy"><figcaption>The Print over LAN button and the About box.</figcaption></figure>
+    <figure><img src="images/sent.webp" alt="Job sent message" loading="lazy"><figcaption>Confirmation once the printer reports it has started.</figcaption></figure>
+  </div>
+
+  <section id="hardware" hidden>
+    <h2>On a real printer</h2>
+    <div class="gallery">
+      <figure><img data-optional src="images/unit.jpg" alt="Bambu printer running a job sent from Cura" loading="lazy"></figure>
+      <figure><img data-optional src="images/unit-2.jpg" alt="Printer close-up" loading="lazy"></figure>
+      <figure><img data-optional src="images/real-feed.jpg" alt="Printer screen showing the Cura job" loading="lazy"></figure>
+    </div>
+  </section>
+
+  <h2>Please note</h2>
+  <p class="note">Provided <strong>as is, with no warranty and no liability</strong>. This plugin starts real jobs on a real machine: a wrong profile can crash the nozzle or damage the bed, so watch your first print. Not affiliated with or endorsed by Bambu Lab or UltiMaker.</p>
+
+  <footer>
+    <p>Required Notice: Copyright Matthew Armstrong (<a href="https://github.com/The-Dorkknight">https://github.com/The-Dorkknight</a>)</p>
+    <p>Licensed under the <a data-repo-link="/blob/main/LICENSE.md" href="https://github.com/The-Dorkknight/cura-bambu-lan/blob/main/LICENSE.md">PolyForm Noncommercial License 1.0.0</a>: free for personal and other non-commercial use; commercial use needs permission. Source-available, not OSI open source.</p>
+    <p><a data-repo-link="/blob/main/THIRD_PARTY.md" href="https://github.com/The-Dorkknight/cura-bambu-lan/blob/main/THIRD_PARTY.md">Third-party notices</a> · <a data-repo-link="/issues" href="https://github.com/The-Dorkknight/cura-bambu-lan/issues">Report a problem</a></p>
+  </footer>
+</div>
+<script>
+(function () {
+  // Work out owner/repo from the Pages URL so links survive renames and forks.
+  var owner = "The-Dorkknight", repo = "cura-bambu-lan";
+  var host = location.hostname;
+  if (/\.github\.io$/i.test(host)) {
+    owner = host.split(".")[0];
+    var first = location.pathname.split("/").filter(Boolean)[0];
+    if (first) repo = first;
+  }
+  var base = "https://github.com/" + owner + "/" + repo;
+  document.querySelectorAll("[data-repo-link]").forEach(function (a) {
+    a.href = base + a.getAttribute("data-repo-link");
+  });
+  // Optional hardware photos: drop missing ones, show the section if any loaded.
+  var section = document.getElementById("hardware");
+  document.querySelectorAll("img[data-optional]").forEach(function (img) {
+    function ok() { section.hidden = false; }
+    function gone() { var f = img.closest("figure"); if (f) f.remove(); }
+    if (img.complete) { img.naturalWidth ? ok() : gone(); }
+    img.addEventListener("load", ok);
+    img.addEventListener("error", gone);
+  });
+})();
+</script>
+</body>
+</html>

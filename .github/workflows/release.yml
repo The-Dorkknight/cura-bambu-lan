@@ -1,0 +1,50 @@
+# Required Notice: Copyright Matthew Armstrong (https://github.com/The-Dorkknight)
+# Licensed under the PolyForm Noncommercial License 1.0.0. No warranty.
+#
+# Runs the tests (against the simulated printer) on every push. On a version
+# tag (v1.2.3) it also builds the .curapackage with the tag's version and
+# publishes a GitHub Release with it and SHA256SUMS.txt. Tags containing "-"
+# (e.g. v1.2.0-beta) become pre-releases.
+
+name: Test and release
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  pull_request:
+
+permissions:
+  contents: write
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Unit tests (simulated printer)
+        run: python3 -m unittest discover -s tests -v
+      - name: Build package
+        run: python3 tools/build_curapackage.py
+
+  release:
+    needs: test
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build package with the tag's version
+        run: python3 tools/build_curapackage.py --version "${GITHUB_REF_NAME}"
+      - name: Checksums
+        run: cd dist && sha256sum *.curapackage > SHA256SUMS.txt && cat SHA256SUMS.txt
+      - name: Publish release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          PRE=""
+          case "${GITHUB_REF_NAME}" in *-*) PRE="--prerelease";; esac
+          gh release create "${GITHUB_REF_NAME}" dist/*.curapackage dist/SHA256SUMS.txt \
+            --title "${GITHUB_REF_NAME}" --generate-notes $PRE
